@@ -18,6 +18,12 @@ pub struct ImageAssets {
     pub katana_item: Handle<Image>,
     pub gloves_item: Handle<Image>,
     pub pendant_item: Handle<Image>,
+
+    // Enemies
+    pub small_goblin: Handle<Image>,
+    pub medium_goblin: Handle<Image>,
+    pub large_goblin: Handle<Image>,
+    pub wolf: Handle<Image>,
 }
 
 pub fn load_assets(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -32,5 +38,9 @@ pub fn load_assets(mut commands: Commands, asset_server: Res<AssetServer>) {
         katana_item: asset_server.load("images/Objets/Katana.jpg"),
         gloves_item: asset_server.load("images/Objets/Gants.jpg"),
         pendant_item: asset_server.load("images/Objets/Pendentif.jpg"),
+        small_goblin: asset_server.load("images/Enemies/Petit_Gobelin.jpg"),
+        medium_goblin: asset_server.load("images/Enemies/Moyen_Gobelin.jpg"),
+        large_goblin: asset_server.load("images/Enemies/Gros_Gobelin.jpg"),
+        wolf: asset_server.load("images/Enemies/Loup.jpg"),
     });
 }

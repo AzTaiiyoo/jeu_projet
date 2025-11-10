@@ -10,7 +10,7 @@ pub struct Stats {
 }
 
 /// Une position sur la carte (coordonnées x, y)
-#[derive(Component, Debug, Clone, Copy, PartialEq)]
+#[derive(Component, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub struct Position {
     pub x: usize,
     pub y: usize,

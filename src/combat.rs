@@ -7,7 +7,11 @@ use rand::Rng;
 pub fn start_combat(player: &mut Player, enemy: &Enemy) -> bool {
     println!(
         "Combat contre {} (HP: {}, ATK: {}, SPD: {}, CRIT: {}%)",
-        enemy.name, enemy.stats.hp, enemy.stats.attack, enemy.stats.speed, enemy.stats.critical_chance
+        enemy.name,
+        enemy.stats.hp,
+        enemy.stats.attack,
+        enemy.stats.speed,
+        enemy.stats.critical_chance
     );
 
     let mut rng = rand::thread_rng();
@@ -28,7 +32,11 @@ pub fn start_combat(player: &mut Player, enemy: &Enemy) -> bool {
                 damage *= 2;
             }
             enemy_hp -= damage;
-            println!("L'ennemi subit {} dégâts. HP restants : {}", damage, enemy_hp.max(0));
+            println!(
+                "L'ennemi subit {} dégâts. HP restants : {}",
+                damage,
+                enemy_hp.max(0)
+            );
         }
 
         if enemy_hp <= 0 {
@@ -51,7 +59,11 @@ pub fn start_combat(player: &mut Player, enemy: &Enemy) -> bool {
                 damage *= 2;
             }
             player_hp -= damage;
-            println!("Vous subissez {} dégâts. HP restants : {}", damage, player_hp.max(0));
+            println!(
+                "Vous subissez {} dégâts. HP restants : {}",
+                damage,
+                player_hp.max(0)
+            );
         }
 
         if player_hp <= 0 {

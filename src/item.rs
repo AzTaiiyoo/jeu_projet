@@ -1,6 +1,6 @@
-use bevy::prelude::{Component, Handle, Image};
-use crate::entity::Stats;
 use crate::assets::ImageAssets;
+use crate::entity::Stats;
+use bevy::prelude::{Component, Handle, Image};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ItemType {
@@ -28,9 +28,29 @@ pub struct Item {
 
 pub fn get_stats_for_item(item_type: ItemType) -> Stats {
     match item_type {
-        ItemType::Armure => Stats { hp: 50, attack: 0, speed: 0, critical_chance: 0 },
-        ItemType::Katana => Stats { hp: 0, attack: 0, speed: 5, critical_chance: 0 },
-        ItemType::Gants => Stats { hp: 0, attack: 10, speed: 0, critical_chance: 0 },
-        ItemType::Pendentif => Stats { hp: 0, attack: 0, speed: 0, critical_chance: 10 },
+        ItemType::Armure => Stats {
+            hp: 50,
+            attack: 0,
+            speed: 0,
+            critical_chance: 0,
+        },
+        ItemType::Katana => Stats {
+            hp: 0,
+            attack: 0,
+            speed: 5,
+            critical_chance: 0,
+        },
+        ItemType::Gants => Stats {
+            hp: 0,
+            attack: 10,
+            speed: 0,
+            critical_chance: 0,
+        },
+        ItemType::Pendentif => Stats {
+            hp: 0,
+            attack: 0,
+            speed: 0,
+            critical_chance: 10,
+        },
     }
 }

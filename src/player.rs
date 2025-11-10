@@ -1,6 +1,6 @@
+use crate::assets::ImageAssets;
 use crate::entity::{Position, Stats};
 use bevy::prelude::{Component, Handle, Image};
-use crate::assets::ImageAssets;
 
 /// Les différentes classes jouables
 #[derive(Debug, Clone, Copy, PartialEq)]
