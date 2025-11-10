@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 rand = "0.8"
+bevy = { version = "0.12", features = ["bevy_asset", "bevy_core_pipeline", "bevy_render", "bevy_sprite", "bevy_text", "bevy_ui", "bevy_winit", "jpeg"] }

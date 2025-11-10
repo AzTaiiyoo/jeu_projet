@@ -1,3 +1,5 @@
+use bevy::prelude::Component;
+
 /// Une structure de statistiques partagée par le joueur, les ennemis et les objets
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Stats {
@@ -8,27 +10,10 @@ pub struct Stats {
 }
 
 /// Une position sur la carte (coordonnées x, y)
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Component, Debug, Clone, Copy, PartialEq)]
 pub struct Position {
     pub x: usize,
     pub y: usize,
-}
-
-/// Les différents types d'objets que l'on peut trouver
-#[derive(Debug, Clone, Copy)]
-pub enum ItemType {
-    HealthBoost,
-    AttackBoost,
-    SpeedBoost,
-}
-
-/// Un objet placé sur la carte
-#[derive(Debug, Clone, Copy)]
-pub struct Item {
-    pub item_type: ItemType,
-    pub position: Position,
-    pub stats: Stats, // Les stats que l'objet confère
-    pub name: &'static str,
 }
 
 /// Un ennemi sur la carte

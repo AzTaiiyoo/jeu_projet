@@ -1,35 +1,62 @@
 use crate::entity::{Position, Stats};
+use bevy::prelude::{Component, Handle, Image};
+use crate::assets::ImageAssets;
 
 /// Les différentes classes jouables
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Class {
+pub enum PlayerClass {
     Warrior,
-    Rogue,
+    Mage,
+    Assassin,
+    Executioner,
+}
+
+impl PlayerClass {
+    pub fn get_image_handle(&self, image_assets: &ImageAssets) -> Handle<Image> {
+        match self {
+            PlayerClass::Warrior => image_assets.warrior_class.clone(),
+            PlayerClass::Mage => image_assets.mage_class.clone(),
+            PlayerClass::Assassin => image_assets.assassin_class.clone(),
+            PlayerClass::Executioner => image_assets.executioner_class.clone(),
+        }
+    }
 }
 
 /// Représente le joueur
-#[derive(Debug)]
+#[derive(Component, Debug, Clone)]
 pub struct Player {
-    pub class: Class,
+    pub class: PlayerClass,
     pub stats: Stats,
     pub position: Position,
 }
 
 impl Player {
     /// Crée un nouveau joueur basé sur la classe choisie et une position de départ
-    pub fn new(class: Class, start_position: Position) -> Self {
+    pub fn new(class: PlayerClass, start_position: Position) -> Self {
         let stats = match class {
-            Class::Warrior => Stats {
-                hp: 150,
-                attack: 15,
-                speed: 5,
-                critical_chance: 5,
-            },
-            Class::Rogue => Stats {
-                hp: 100,
+            PlayerClass::Warrior => Stats {
+                hp: 120,
                 attack: 10,
-                speed: 10,
+                speed: 5,
                 critical_chance: 10,
+            },
+            PlayerClass::Mage => Stats {
+                hp: 90,
+                attack: 15,
+                speed: 3,
+                critical_chance: 15,
+            },
+            PlayerClass::Assassin => Stats {
+                hp: 100,
+                attack: 8,
+                speed: 12,
+                critical_chance: 15,
+            },
+            PlayerClass::Executioner => Stats {
+                hp: 120,
+                attack: 7,
+                speed: 2,
+                critical_chance: 25,
             },
         };
 
