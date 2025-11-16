@@ -229,21 +229,89 @@ if dodge_roll <= stats.speed {
 
 ## Structure du projet
 
+Le projet suit une architecture modulaire inspirée des meilleures pratiques Rust et Bevy, avec une séparation claire des responsabilités.
+
 ```
 src/
-├── main.rs       # Point d'entrée, UI, systèmes principaux
-├── entity.rs     # Position, Stats, composants partagés
-├── player.rs     # Classes et gestion du joueur
-├── enemy.rs      # Types d'ennemis et leurs stats
-├── combat.rs     # Logique de combat (actuellement inutilisé)
-├── item.rs       # Types d'objets et bonus
-├── map.rs        # Génération et navigation de carte
-└── assets.rs     # Chargement des assets
+├── main.rs                    # Point d'entrée (73 lignes)
+│
+├── components/                # Components Bevy partagés
+│   ├── position.rs           # Position logique sur la grille
+│   ├── stats.rs              # Statistiques (HP, ATK, SPD, CRIT)
+│   └── markers.rs            # Marker components (MapTile, CombatUI, etc.)
+│
+├── resources/                 # Resources Bevy (données globales)
+│   ├── game_log.rs           # Historique des événements
+│   ├── collected_items.rs    # Objets collectés (persistant)
+│   ├── defeated_enemies.rs   # Ennemis vaincus (persistant)
+│   ├── combat_state.rs       # État du combat en cours
+│   └── selected_class.rs     # Classe sélectionnée temporaire
+│
+├── states/                    # États du jeu
+│   └── mod.rs                # GameState enum (ClassSelection, Map, Combat, MapTransition)
+│
+├── config/                    # Configuration globale
+│   └── mod.rs                # Constantes (TILE_SIZE, etc.)
+│
+├── systems/                   # Systèmes Bevy organisés par fonctionnalité
+│   ├── camera/               # Configuration caméra
+│   │   └── mod.rs            # setup_camera
+│   │
+│   ├── class_selection/      # Écran de sélection de classe
+│   │   ├── setup.rs          # Création de l'UI de sélection
+│   │   ├── input.rs          # Gestion des inputs clavier/souris
+│   │   └── cleanup.rs        # Nettoyage UI + spawn du joueur
+│   │
+│   ├── map/                  # Gestion des cartes
+│   │   ├── data.rs           # Structures Map et GameData
+│   │   ├── spawn.rs          # Génération visuelle de la map
+│   │   ├── despawn.rs        # Nettoyage de la map
+│   │   └── transition.rs     # Transitions entre maps
+│   │
+│   ├── player/               # Systèmes du joueur
+│   │   ├── movement.rs       # Déplacement + détection connexions
+│   │   ├── transform.rs      # Synchronisation position logique/visuelle
+│   │   ├── item_pickup.rs    # Détection et collecte d'objets
+│   │   └── enemy_encounter.rs # Détection de collision avec ennemis
+│   │
+│   ├── combat/               # Système de combat tour par tour
+│   │   ├── calculations.rs   # Fonctions pures (dégâts, esquive, critique)
+│   │   ├── setup.rs          # Création de l'UI de combat
+│   │   ├── logic.rs          # Logique des tours de combat
+│   │   └── cleanup.rs        # Nettoyage après combat
+│   │
+│   └── ui/                   # Interface utilisateur
+│       └── info_terminal.rs  # Terminal d'information (stats + log)
+│
+├── player.rs                  # Classe Player et PlayerClass enum
+├── enemy.rs                   # Classe Enemy et EnemyType enum
+├── item.rs                    # Classe Item et ItemType enum
+├── assets.rs                  # Chargement des assets (images, fonts)
+└── entity.rs                  # Réexports pour compatibilité
 
 assets/
-├── fonts/        # Police pour l'UI
-└── images/       # Sprites des classes, ennemis, objets, tuiles
+├── fonts/                     # Police pour l'UI
+└── images/                    # Sprites des classes, ennemis, objets, tuiles
 ```
+
+### Architecture
+
+Cette structure suit le pattern **ECS (Entity-Component-System)** de Bevy avec une organisation par **fonctionnalité** plutôt que par type technique. Chaque sous-module de `systems/` correspond à une fonctionnalité spécifique du jeu :
+
+- **camera/** : Configuration initiale de la caméra 2D
+- **class_selection/** : Écran de sélection du personnage au démarrage
+- **map/** : Tout ce qui concerne les cartes (génération, navigation, transitions)
+- **player/** : Comportements du joueur (mouvement, interactions)
+- **combat/** : Système de combat tour par tour avec calculs isolés
+- **ui/** : Interface utilisateur pendant l'exploration
+
+**Avantages de cette structure** :
+
+- ✅ Fichiers de 50-180 lignes (vs 1171 lignes dans l'ancien main.rs)
+- ✅ Séparation claire des responsabilités
+- ✅ Fonctions pures testables (`combat/calculations.rs`)
+- ✅ Facile d'ajouter de nouvelles fonctionnalités
+- ✅ Navigation intuitive dans le code
 
 ## Compilation et exécution
 
@@ -263,7 +331,7 @@ cargo fmt
 
 ## Assistance de l'IA dans le projet
 
-L'IA a été utilisé pour la compréhension de certains concepts de Rust/Bevy, ainsi que pour la gestion de la structure du code et certains éléments de la documentation.
+L'IA a été utilisée pour la compréhension de certains concepts de Rust/Bevy, ainsi que pour la gestion de la structure du code et certains éléments de la documentation.
 
 **Parmi les concepts utilisés**, on trouve les points suivants :
 
@@ -284,7 +352,7 @@ L'IA a été utilisé pour la compréhension de certains concepts de Rust/Bevy, 
     - PartialEq permet de comparer deux objets
     - Component permet de dire que c'est un composant Bevy
 
-- **map.rs** :
+- **systems/map/** :
 
   - Utilisation de **HashMap**, qui finalement fait partie de la bibliothèque standard de Rust et fonctionne de manière identique à celle trouvé sur les autres langages de programmation (comme Java, Python ...).
   - Compréhension de la différence entre :
@@ -299,9 +367,9 @@ L'IA a été utilisé pour la compréhension de certains concepts de Rust/Bevy, 
     ```
     qui fonctionne comme des "une fonction anonyme" qui permet d'économiser du code.
 
-**La majorité des notions propre à beavy qui m'ont été expliquées par l'IA sont listés ci-dessous.**
+**La majorité des notions propres à Bevy qui m'ont été expliquées par l'IA sont listées ci-dessous.**
 
-- ## **main.rs** :
+- **main.rs** :
   ```rust
   App::new() : Créer une nouvelle application Bevy
   add_plugins : Ajouter des plugins Bevy
@@ -312,4 +380,4 @@ L'IA a été utilisé pour la compréhension de certains concepts de Rust/Bevy, 
 
 L'auto-complétion de l'IA a été utilisée également pour accélérer le développement du projet.
 
-L'essentiel des éléments du projet ayant été assité par IA (en plus des quelques concepts manquants) concerne l'utilisation de **Bevy**, dans un contexte **ECS (Entity Component System)**.
+L'essentiel des éléments du projet ayant été assisté par IA (en plus des quelques concepts manquants) concerne l'utilisation de **Bevy**, dans un contexte **ECS (Entity Component System)**.

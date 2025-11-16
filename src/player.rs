@@ -1,5 +1,5 @@
 use crate::assets::ImageAssets;
-use crate::entity::{Position, Stats};
+use crate::components::{Position, Stats};
 use bevy::prelude::{Component, Handle, Image};
 
 /// Les différentes classes jouables avec des profils de stats équilibrés
@@ -31,6 +31,7 @@ impl PlayerClass {
 pub struct Player {
     pub class: PlayerClass,
     pub stats: Stats,
+    #[allow(dead_code)]
     pub position: Position,
 }
 

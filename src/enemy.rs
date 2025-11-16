@@ -1,5 +1,5 @@
 use crate::assets::ImageAssets;
-use crate::entity::Stats;
+use crate::components::Stats;
 use bevy::prelude::{Component, Handle, Image};
 
 /// Types d'ennemis avec difficulté progressive

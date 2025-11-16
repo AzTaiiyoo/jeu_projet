@@ -1,4 +1,6 @@
-use crate::{enemy::EnemyType, entity::Position, item::ItemType};
+use crate::components::Position;
+use crate::enemy::EnemyType;
+use crate::item::ItemType;
 use bevy::prelude::Resource;
 use std::collections::HashMap;
 
@@ -10,31 +12,26 @@ pub enum Tile {
     Connection, // Point de connexion vers une autre map
 }
 
-/// Taille d'une tuile en pixels (utilisée pour le rendu et le positionnement)
-pub const TILE_SIZE: f32 = 64.0;
-
 /// Représente une carte du jeu
 /// Contient la grille de tuiles, les objets, les ennemis et les connexions
 #[derive(Resource, Clone, Default)]
 pub struct Map {
-    pub grid: Vec<Vec<Tile>>,                              // Grille 2D de tuiles
-    pub player_start: Position,                            // Position de spawn du joueur
-    pub width: usize,                                      // Largeur de la map en tuiles
-    pub height: usize,                                     // Hauteur de la map en tuiles
-    pub connections: HashMap<Position, (usize, Position)>, // Connexions vers d'autres maps (position → (index map, position arrivée))
-    pub items: Vec<(Position, ItemType)>,                  // Liste des objets sur la map
-    pub enemies: Vec<(Position, EnemyType)>,               // Liste des ennemis sur la map
+    pub grid: Vec<Vec<Tile>>,
+    pub player_start: Position,
+    pub width: usize,
+    pub height: usize,
+    pub connections: HashMap<Position, (usize, Position)>,
+    pub items: Vec<(Position, ItemType)>,
+    pub enemies: Vec<(Position, EnemyType)>,
 }
 
 impl Map {
     /// Vérifie si une position donnée est praticable (pas un mur, dans les limites)
     /// Utilisé pour la validation du déplacement du joueur
     pub fn is_walkable(&self, x: usize, y: usize) -> bool {
-        // Vérifie les limites de la carte
         if y >= self.grid.len() || x >= self.grid[y].len() {
             return false;
         }
-        // Vérifie le type de tuile
         matches!(self.grid[y][x], Tile::Path | Tile::Connection)
     }
 }
@@ -43,24 +40,12 @@ impl Map {
 /// Gère la map actuelle et permet de naviguer entre les maps
 #[derive(Resource)]
 pub struct GameData {
-    pub maps: Vec<Map>,           // Collection de toutes les maps
-    pub current_map_index: usize, // Index de la map actuellement active
+    pub maps: Vec<Map>,
+    pub current_map_index: usize,
 }
 
 impl GameData {
     /// Crée les données de jeu avec toutes les maps prédéfinies
-    ///
-    /// Structure actuelle :
-    /// - Map 1 (14×10) : 3 Petits Gobelins + 1 Gobelin Moyen, 2 objets
-    ///   Connection vers Map 2 en (13, 5)
-    ///
-    /// - Map 2 (14×10) : 3 Gobelins Moyens + 1 Gros Gobelin + 1 Loup (boss), 2 objets
-    ///   Connection vers Map 1 en (0, 5)
-    ///
-    /// Layout des maps : Utilise une notation string pour faciliter la conception
-    /// - 'W' = Wall (mur)
-    /// - 'P' = Path (chemin)
-    /// - 'C' = Connection (point de connexion)
     pub fn new() -> Self {
         let mut maps = Vec::new();
 
@@ -140,7 +125,7 @@ impl GameData {
             (Position { x: 8, y: 3 }, EnemyType::MediumGoblin),
             (Position { x: 10, y: 5 }, EnemyType::LargeGoblin),
             (Position { x: 6, y: 7 }, EnemyType::MediumGoblin),
-            (Position { x: 11, y: 8 }, EnemyType::Wolf), // Boss Loup
+            (Position { x: 11, y: 8 }, EnemyType::Wolf),
         ];
 
         let grid2: Vec<Vec<Tile>> = layout2
