@@ -2,16 +2,19 @@ use crate::assets::ImageAssets;
 use crate::entity::{Position, Stats};
 use bevy::prelude::{Component, Handle, Image};
 
-/// Les différentes classes jouables
+/// Les différentes classes jouables avec des profils de stats équilibrés
+/// Chaque classe a des forces et faiblesses uniques pour varier le gameplay
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PlayerClass {
-    Warrior,
-    Mage,
-    Assassin,
-    Executioner,
+    Warrior,     // Tanky avec HP élevés
+    Mage,        // Forte attaque mais fragile
+    Assassin,    // Très rapide avec esquive élevée
+    Executioner, // Spécialisé dans les coups critiques
 }
 
 impl PlayerClass {
+    /// Retourne le handle de l'image correspondant à la classe
+    /// Utilisé pour afficher le sprite du joueur
     pub fn get_image_handle(&self, image_assets: &ImageAssets) -> Handle<Image> {
         match self {
             PlayerClass::Warrior => image_assets.warrior_class.clone(),
@@ -22,7 +25,8 @@ impl PlayerClass {
     }
 }
 
-/// Représente le joueur
+/// Component Bevy représentant le joueur
+/// Contient la classe choisie, les stats actuelles et la position logique
 #[derive(Component, Debug, Clone)]
 pub struct Player {
     pub class: PlayerClass,
@@ -31,7 +35,13 @@ pub struct Player {
 }
 
 impl Player {
-    /// Crée un nouveau joueur basé sur la classe choisie et une position de départ
+    /// Crée un nouveau joueur basé sur la classe choisie
+    ///
+    /// Stats de base par classe :
+    /// - Guerrier: HP 120, ATK 10, SPD 5, CRIT 10%
+    /// - Magicien: HP 90, ATK 15, SPD 3, CRIT 15%
+    /// - Assassin: HP 100, ATK 8, SPD 12, CRIT 15%
+    /// - Bourreau: HP 120, ATK 7, SPD 2, CRIT 25%
     pub fn new(class: PlayerClass, start_position: Position) -> Self {
         let stats = match class {
             PlayerClass::Warrior => Stats {
@@ -67,7 +77,9 @@ impl Player {
         }
     }
 
-    /// Applique les bonus d'un objet aux statistiques du joueur
+    /// Applique les bonus d'un objet collecté aux statistiques du joueur
+    /// Les bonus sont additifs et permanents
+    /// Affiche les nouvelles stats dans la console pour débogage
     pub fn apply_item_stats(&mut self, item_stats: &Stats) {
         self.stats.hp += item_stats.hp;
         self.stats.attack += item_stats.attack;

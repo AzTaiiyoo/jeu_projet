@@ -12,7 +12,11 @@ mod player;
 use crate::assets::ImageAssets;
 use crate::entity::Position;
 
-// Game states
+/// États du jeu utilisés pour gérer le flow de l'application
+/// - ClassSelection: Écran de sélection de la classe du joueur
+/// - Map: Mode exploration où le joueur se déplace sur la carte
+/// - Combat: Mode combat tour par tour contre un ennemi
+/// - MapTransition: État temporaire pour changer de carte
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq, Hash, States)]
 enum GameState {
     #[default]
@@ -26,25 +30,34 @@ enum GameState {
 #[derive(Resource)]
 struct SelectedClass(player::PlayerClass);
 
-// Resource pour tracker les objets collectés (map_index, position)
+/// Resource pour stocker les objets collectés par le joueur
+/// Utilise un HashSet pour éviter les doublons
+/// Stocke un tuple (index de la map, position de l'objet)
+/// Permet de ne pas respawner les objets déjà collectés lors des transitions entre maps
 #[derive(Resource, Default)]
 struct CollectedItems {
     items: HashSet<(usize, Position)>,
 }
 
-// Resource pour tracker les ennemis vaincus (map_index, position)
+/// Resource pour stocker les ennemis vaincus par le joueur
+/// Utilise un HashSet pour éviter les doublons
+/// Stocke un tuple (index de la map, position de l'ennemi)
+/// Permet de ne pas respawner les ennemis déjà vaincus lors des transitions entre maps
 #[derive(Resource, Default)]
 struct DefeatedEnemies {
     enemies: HashSet<(usize, Position)>,
 }
 
-// Resource pour stocker les messages de jeu
+/// Resource pour stocker les messages de jeu affichés dans le terminal d'information
+/// Conserve un historique des 10 derniers messages pour éviter de surcharger l'UI
 #[derive(Resource, Default)]
 struct GameLog {
     messages: Vec<String>,
 }
 
 impl GameLog {
+    /// Ajoute un message au log de jeu
+    /// Limite automatiquement à 10 messages en supprimant les plus anciens
     fn add_message(&mut self, message: String) {
         println!("Ajout message au log: {}", message);
         self.messages.push(message);
@@ -56,7 +69,9 @@ impl GameLog {
     }
 }
 
-// Resource pour stocker l'ennemi en combat
+/// Resource pour stocker l'ennemi actuellement en combat
+/// Conserve l'entité Bevy, la position, le type et les stats de l'ennemi
+/// Utilisée pour accéder aux données de l'ennemi pendant le combat
 #[derive(Resource)]
 struct CurrentEnemy {
     entity: Entity,
@@ -66,7 +81,8 @@ struct CurrentEnemy {
     stats: entity::Stats,
 }
 
-// Resource pour l'état du combat
+/// Resource pour gérer l'état du combat tour par tour
+/// Contient les HP actuels des combattants, le log de combat et le tour actuel
 #[derive(Resource, Default)]
 struct CombatState {
     player_hp: i32,
@@ -84,7 +100,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
-                title: "Jeu de l'Aventure".into(),
+                title: "Elden World".into(),
                 resolution: (window_width + 300.0, window_height).into(), // Ajouter de l'espace pour le terminal
                 present_mode: PresentMode::AutoVsync,
                 resizable: true,
@@ -131,6 +147,8 @@ fn main() {
         .run();
 }
 
+/// Configure la caméra 2D avec scaling automatique basé sur la taille de la map
+/// La caméra utilise AutoMin pour s'adapter à la fenêtre tout en gardant les proportions
 fn setup_camera(mut commands: Commands, game_data: Res<map::GameData>) {
     let game_map = game_data.get_current_map();
     let window_width = game_map.width as f32 * map::TILE_SIZE;
@@ -355,6 +373,9 @@ fn cleanup_class_selection_ui(
 #[derive(Component)]
 struct MapTile;
 
+/// Crée l'entité joueur avec la classe sélectionnée et le positionne sur la map
+/// Appelé lors de la sortie de l'état ClassSelection
+/// La ressource SelectedClass est supprimée après utilisation
 fn spawn_player(
     mut commands: Commands,
     selected_class: Res<SelectedClass>,
@@ -389,6 +410,12 @@ fn spawn_player(
     commands.remove_resource::<SelectedClass>();
 }
 
+/// Génère tous les éléments visuels de la map actuelle :
+/// - Les tuiles (murs et chemins)
+/// - Les objets collectables (en vérifiant qu'ils n'ont pas déjà été collectés)
+/// - Les ennemis (en vérifiant qu'ils n'ont pas déjà été vaincus)
+///
+/// Z-ordering : Tiles (0.0) → Items (0.5) → Ennemis (0.7) → Joueur (1.0)
 fn spawn_map(
     mut commands: Commands,
     game_data: Res<map::GameData>,
@@ -493,6 +520,9 @@ fn spawn_map(
     }
 }
 
+/// Gère le déplacement du joueur avec les touches Z/Q/S/D ou flèches directionnelles
+/// Vérifie que la nouvelle position est praticable avant de déplacer le joueur
+/// Détecte les connexions entre maps et déclenche une transition si nécessaire
 fn move_player(
     keyboard_input: Res<Input<KeyCode>>,
     mut player_query: Query<&mut entity::Position, With<player::Player>>,
@@ -529,6 +559,9 @@ fn move_player(
     }
 }
 
+/// Synchronise la position visuelle (Transform) du joueur avec sa position logique (Position)
+/// Met à jour les coordonnées du sprite en tenant compte de la taille de la map
+/// Maintient le Z-order à 1.0 pour que le joueur soit toujours visible au-dessus des autres éléments
 fn update_player_transform(
     game_data: Res<map::GameData>,
     mut player_query: Query<(&entity::Position, &mut Transform), With<player::Player>>,
@@ -543,6 +576,12 @@ fn update_player_transform(
     }
 }
 
+/// Vérifie si le joueur est sur la même case qu'un objet
+/// Si oui :
+/// - Applique les bonus de stats de l'objet au joueur
+/// - Ajoute des messages au log de jeu
+/// - Marque l'objet comme collecté dans CollectedItems
+/// - Détruit l'entité de l'objet
 fn check_for_item_pickup(
     mut commands: Commands,
     mut player_query: Query<(&entity::Position, &mut player::Player)>,
@@ -596,6 +635,12 @@ fn check_for_item_pickup(
     }
 }
 
+/// Vérifie si le joueur est sur la même case qu'un ennemi
+/// Si oui :
+/// - Sauvegarde les données de l'ennemi dans CurrentEnemy
+/// - Initialise l'état du combat (CombatState)
+/// - Ajoute un message au log
+/// - Change l'état du jeu vers Combat
 fn check_for_enemy_encounter(
     mut commands: Commands,
     player_query: Query<(&entity::Position, &player::Player)>,
@@ -637,6 +682,10 @@ fn check_for_enemy_encounter(
     }
 }
 
+/// Détruit toutes les entités de la map lors du changement d'état
+/// Nettoie les tuiles, objets et ennemis pour préparer le chargement de la nouvelle map
+/// Important : Cette fonction est appelée AVANT d'entrer en mode Combat,
+/// donc les entités ennemies n'existent plus pendant le combat
 fn despawn_map(
     mut commands: Commands,
     map_tile_query: Query<Entity, With<MapTile>>,
@@ -658,6 +707,10 @@ fn map_transition(mut next_state: ResMut<NextState<GameState>>) {
     next_state.set(GameState::Map);
 }
 
+/// Crée l'UI du terminal d'information sur le côté droit de l'écran
+/// Affiche :
+/// - Les statistiques du joueur (classe, HP, attaque, vitesse, critique)
+/// - Les événements récents du jeu (ramassage d'objets, combats, etc.)
 fn setup_info_terminal(
     mut commands: Commands,
     player_query: Query<&player::Player>,
@@ -791,6 +844,9 @@ fn cleanup_info_terminal(
     }
 }
 
+/// Met à jour en temps réel le contenu du terminal d'information
+/// Synchronise les stats du joueur et le log de jeu
+/// Utilise une optimisation : ne met à jour que si le contenu a changé
 fn update_info_terminal(
     player_query: Query<&player::Player>,
     mut stats_text_query: Query<&mut Text, (With<StatsText>, Without<LogText>)>,
@@ -840,6 +896,9 @@ fn update_info_terminal(
 
 // ============ SYSTÈME DE COMBAT ============
 
+/// Configure l'interface de combat avec un overlay fullscreen
+/// Affiche les stats des deux combattants et les instructions
+/// Appelé lors de l'entrée en mode Combat
 fn setup_combat(
     mut commands: Commands,
     player_query: Query<&player::Player>,
@@ -951,6 +1010,23 @@ fn setup_combat(
         });
 }
 
+/// Gère la logique du combat tour par tour
+///
+/// Mécanique de combat :
+/// 1. Tour du joueur (ESPACE) :
+///    - Calcul d'esquive de l'ennemi (basé sur sa vitesse)
+///    - Calcul de critique du joueur (basé sur son taux de critique)
+///    - Application des dégâts (×2 si critique)
+///
+/// 2. Tour de l'ennemi (automatique) :
+///    - Même logique mais inversée
+///
+/// 3. Fin de combat :
+///    - Victoire : Choix d'amélioration de stat (H/A/S/C)
+///    - Défaite : Game Over avec option de recommencer (R)
+///
+/// Important : Ne tente pas de despawn l'entité ennemie car elle a déjà été
+/// détruite par despawn_map lors de la transition Map → Combat
 fn handle_combat(
     mut commands: Commands,
     keyboard_input: Res<Input<KeyCode>>,

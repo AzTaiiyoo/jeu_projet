@@ -2,15 +2,18 @@ use crate::assets::ImageAssets;
 use crate::entity::Stats;
 use bevy::prelude::{Component, Handle, Image};
 
+/// Types d'objets collectables avec leurs bonus spécifiques
+/// Chaque objet améliore une statistique particulière
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ItemType {
-    Armure,
-    Katana,
-    Gants,
-    Pendentif,
+    Armure,    // +50 HP (survie)
+    Katana,    // +5 SPD (esquive)
+    Gants,     // +10 ATK (dégâts)
+    Pendentif, // +10% CRIT (coups critiques)
 }
 
 impl ItemType {
+    /// Retourne le handle de l'image correspondant au type d'objet
     pub fn get_image_handle(&self, image_assets: &ImageAssets) -> Handle<Image> {
         match self {
             ItemType::Armure => image_assets.armor_item.clone(),
@@ -21,11 +24,18 @@ impl ItemType {
     }
 }
 
+/// Component Bevy représentant un objet collectable sur la map
 #[derive(Component, Debug)]
 pub struct Item {
     pub item_type: ItemType,
 }
 
+/// Retourne les bonus de stats pour chaque type d'objet
+/// Les bonus sont appliqués de manière permanente au joueur lors de la collecte
+///
+/// Distribution sur les maps :
+/// - Map 1 : Katana (+5 SPD), Armure (+50 HP)
+/// - Map 2 : Gants (+10 ATK), Pendentif (+10% CRIT)
 pub fn get_stats_for_item(item_type: ItemType) -> Stats {
     match item_type {
         ItemType::Armure => Stats {
@@ -37,12 +47,12 @@ pub fn get_stats_for_item(item_type: ItemType) -> Stats {
         ItemType::Katana => Stats {
             hp: 0,
             attack: 0,
-            speed: 5,
+            speed: 10,
             critical_chance: 0,
         },
         ItemType::Gants => Stats {
             hp: 0,
-            attack: 10,
+            attack: 20,
             speed: 0,
             critical_chance: 0,
         },
@@ -50,7 +60,7 @@ pub fn get_stats_for_item(item_type: ItemType) -> Stats {
             hp: 0,
             attack: 0,
             speed: 0,
-            critical_chance: 10,
+            critical_chance: 15,
         },
     }
 }
