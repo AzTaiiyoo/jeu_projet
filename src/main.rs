@@ -4,7 +4,6 @@ mod assets;
 mod components;
 mod config;
 mod enemy;
-mod entity;
 mod item;
 mod player;
 mod resources;
