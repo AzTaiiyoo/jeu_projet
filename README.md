@@ -361,6 +361,7 @@ L'IA a été utilisée pour la compréhension de certains concepts de Rust/Bevy,
     vec![] : // Créer un vecteur dynamique avec des éléments
     HashMap : // Créer un dictionnaire vide
     ```
+    Ce point à déjà été vu dans "Tour de Rust", mais l'IA m'a permis de clarifier les différences.
   - Utilisation de **closure** pour itérer sur les éléments d'un vecteur avec :
     ```rust
     |element| { ... }
@@ -369,13 +370,19 @@ L'IA a été utilisée pour la compréhension de certains concepts de Rust/Bevy,
 
 **La majorité des notions propres à Bevy qui m'ont été expliquées par l'IA sont listées ci-dessous.**
 
-- **main.rs** :
+- **src/systems/** :
   ```rust
   App::new() : Créer une nouvelle application Bevy
   add_plugins : Ajouter des plugins Bevy
   add_state : Ajouter un état Bevy // sert à gérer les états du jeu
   add_systems : Ajouter des systèmes Bevy // sert à exécuter des fonctions à chaque frame
   NodeBundle : Ajouter un bundle Bevy // sert à ajouter des composants à une entité
+  Camera2dBundle : Ajouter une caméra 2D Bevy // Je saute volontairement certains paramètres qui servent uniquement à setup la caméra
+  Query : Récupérer des entités Bevy // sert à récupérer des entités avec des composants spécifiques
+  Commands : Permet de manipuler les entités Bevy // sert à créer, modifier
+  With<T> : Filtrer les entités Bevy // sert à récupérer uniquement les entités avec le composant T
+  ResMut<T> : Récupérer une resource Bevy en mutable // sert à récupérer une resource globale en lecture/écriture
+  SpriteBundle : Ajouter un sprite Bevy // sert à afficher une image à l'écran
   ```
 
 L'auto-complétion de l'IA a été utilisée également pour accélérer le développement du projet.
