@@ -24,6 +24,9 @@ pub struct ImageAssets {
     pub medium_goblin: Handle<Image>,
     pub large_goblin: Handle<Image>,
     pub wolf: Handle<Image>,
+    pub snake: Handle<Image>,
+    pub drake: Handle<Image>,
+    pub death_bird: Handle<Image>,
 }
 
 pub fn load_assets(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -42,5 +45,8 @@ pub fn load_assets(mut commands: Commands, asset_server: Res<AssetServer>) {
         medium_goblin: asset_server.load("images/Enemies/Moyen_Gobelin.jpg"),
         large_goblin: asset_server.load("images/Enemies/Gros_Gobelin.jpg"),
         wolf: asset_server.load("images/Enemies/Loup.jpg"),
+        snake: asset_server.load("images/Enemies/Serpent.jpg"),
+        drake: asset_server.load("images/Enemies/Soldat_Draconide.jpg"),
+        death_bird: asset_server.load("images/Enemies/Oiseau_Funeraire.jpg"),
     });
 }

@@ -12,6 +12,9 @@ pub enum EnemyType {
     MediumGoblin, // Gobelin Moyen - Équilibré
     LargeGoblin,  // Gros Gobelin - Tanky et fort
     Wolf,         // Loup - Boss final, très dangereux
+    Snake,
+    Drake,
+    DeathBird,
 }
 
 impl EnemyType {
@@ -22,6 +25,9 @@ impl EnemyType {
             EnemyType::MediumGoblin => image_assets.medium_goblin.clone(),
             EnemyType::LargeGoblin => image_assets.large_goblin.clone(),
             EnemyType::Wolf => image_assets.wolf.clone(),
+            EnemyType::Snake => image_assets.snake.clone(),
+            EnemyType::Drake => image_assets.drake.clone(),
+            EnemyType::DeathBird => image_assets.death_bird.clone(),
         }
     }
 
@@ -32,6 +38,9 @@ impl EnemyType {
             EnemyType::MediumGoblin => "Gobelin Moyen",
             EnemyType::LargeGoblin => "Gros Gobelin",
             EnemyType::Wolf => "Loup",
+            EnemyType::Snake => "Serpent",
+            EnemyType::Drake => "Soldat Draconide",
+            EnemyType::DeathBird => "Oiseau Funeraire",
         }
     }
 }
@@ -88,6 +97,24 @@ pub fn get_stats_for_enemy(enemy_type: EnemyType) -> Stats {
             attack: 15,
             speed: 12,
             critical_chance: 20,
+        },
+        EnemyType::Snake => Stats {
+            hp: 200,
+            attack: 30,
+            speed: 20,
+            critical_chance: 20,
+        },
+        EnemyType::Drake => Stats {
+            hp: 150,
+            attack: 27,
+            speed: 8,
+            critical_chance: 20,
+        },
+        EnemyType::DeathBird => Stats {
+            hp: 180,
+            attack: 30,
+            speed: 9,
+            critical_chance: 13,
         },
     }
 }

@@ -111,11 +111,12 @@ impl GameData {
             "C P  P     P W", // Connection at x=0, y=5
             "W WWWWWWWW P W",
             "W P    P P P W",
-            "W P PP P P P W",
+            "W P PP P P P C", // Connection at x=12, y=2
             "WWWWWWWWWWWWWW",
         ];
         let mut connections2 = HashMap::new();
         connections2.insert(Position { x: 0, y: 5 }, (0, Position { x: 12, y: 5 }));
+        connections2.insert(Position { x: 13, y: 8 }, (2, Position { x: 1, y: 8 }));
         let items2 = vec![
             (Position { x: 10, y: 2 }, ItemType::Gants),
             (Position { x: 11, y: 7 }, ItemType::Pendentif),
@@ -152,6 +153,54 @@ impl GameData {
             connections: connections2,
             items: items2,
             enemies: enemies2,
+        });
+
+        let layout3 = vec![
+            "WWWWWWWWWWWWWW",
+            "W P          W",
+            "WWWWWWWWWWWW W",
+            "W P P  P   P W",
+            "W WWWW WWWWWWW",
+            "W WWWWWWW WWWW",
+            "W            W",
+            "WWWWWWWWWWWW W",
+            "C P PP P P P W",  // Connection at x=0, y=2
+            "WWWWWWWWWWWWWW",
+        ];
+
+        let mut connections3 = HashMap::new();
+        connections3.insert(Position { x: 0, y: 8 }, (1, Position { x: 12, y: 8 }));
+        let items3 = vec![];
+        let enemies3 = vec![
+            (Position { x: 11, y: 3 }, EnemyType::Drake),
+            (Position { x: 9, y: 5 }, EnemyType::DeathBird),
+            (Position { x: 3, y: 8 }, EnemyType::Snake),
+        ];
+
+        let grid3: Vec<Vec<Tile>> = layout3
+            .iter()
+            .map(|row| {
+                row.chars()
+                    .map(|c| match c {
+                        'W' => Tile::Wall,
+                        'C' => Tile::Connection,
+                        _ => Tile::Path,
+                    })
+                    .collect()
+            })
+            .collect();
+
+        let height3 = grid3.len();
+        let width3 = grid3.get(0).map_or(0, |row| row.len());
+
+        maps.push(Map {
+            grid: grid3,
+            player_start: Position { x: 1, y: 1 },
+            width: width3,
+            height: height3,
+            connections: connections3,
+            items: items3,
+            enemies: enemies3,
         });
 
         GameData {
