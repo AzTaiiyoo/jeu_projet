@@ -10,7 +10,7 @@ mod resources;
 mod states;
 mod systems;
 
-use config::TILE_SIZE;
+use config::{TILE_SIZE, TERMINAL_WIDTH};
 use resources::*;
 use states::GameState;
 use systems::{camera, class_selection, combat, map, player as player_systems, ui};
@@ -25,7 +25,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "Elden World".into(),
-                resolution: (window_width + 300.0, window_height).into(),
+                resolution: (window_width + TERMINAL_WIDTH, window_height).into(),
                 present_mode: PresentMode::AutoVsync,
                 resizable: true,
                 ..default()

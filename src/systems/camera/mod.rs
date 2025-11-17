@@ -15,5 +15,6 @@ pub fn setup_camera(mut commands: Commands, game_data: Res<GameData>) {
         min_width: window_width,
         min_height: window_height,
     };
+    
     commands.spawn(camera);
 }

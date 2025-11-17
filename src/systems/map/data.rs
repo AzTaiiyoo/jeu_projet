@@ -105,18 +105,18 @@ impl GameData {
         let layout2 = vec![
             "WWWWWWWWWWWWWW",
             "W P P P P P PW",
-            "W W PPPPPPPP W",
+            "W W PPPPPPPP C", // Connection at x=13, y=2
             "W P P  P   P W",
             "W WWWP WWWWP W",
             "C P  P     P W", // Connection at x=0, y=5
             "W WWWWWWWW P W",
             "W P    P P P W",
-            "W P PP P P P C", // Connection at x=12, y=2
+            "W P PP P P P W",
             "WWWWWWWWWWWWWW",
         ];
         let mut connections2 = HashMap::new();
         connections2.insert(Position { x: 0, y: 5 }, (0, Position { x: 12, y: 5 }));
-        connections2.insert(Position { x: 13, y: 8 }, (2, Position { x: 1, y: 8 }));
+        connections2.insert(Position { x: 13, y: 2 }, (2, Position { x: 1, y: 2 }));
         let items2 = vec![
             (Position { x: 10, y: 2 }, ItemType::Gants),
             (Position { x: 11, y: 7 }, ItemType::Pendentif),
@@ -158,18 +158,18 @@ impl GameData {
         let layout3 = vec![
             "WWWWWWWWWWWWWW",
             "W P          W",
-            "WWWWWWWWWWWW W",
+            "C WWWWWWWWWW W", // Connection at x=0, y=2
             "W P P  P   P W",
             "W WWWW WWWWWWW",
             "W WWWWWWW WWWW",
             "W            W",
             "WWWWWWWWWWWW W",
-            "C P PP P P P W",  // Connection at x=0, y=2
+            "W P PP P P P W",
             "WWWWWWWWWWWWWW",
         ];
 
         let mut connections3 = HashMap::new();
-        connections3.insert(Position { x: 0, y: 8 }, (1, Position { x: 12, y: 8 }));
+        connections3.insert(Position { x: 0, y: 2 }, (1, Position { x: 12, y: 2 }));
         let items3 = vec![];
         let enemies3 = vec![
             (Position { x: 11, y: 3 }, EnemyType::Drake),

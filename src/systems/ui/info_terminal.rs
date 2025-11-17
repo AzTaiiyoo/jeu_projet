@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use crate::components::{InfoTerminal, LogText, StatsText};
+use crate::config::TERMINAL_WIDTH;
 use crate::player::{Player, PlayerClass};
 use crate::resources::GameLog;
 
@@ -21,7 +22,7 @@ pub fn setup_info_terminal(
                     position_type: PositionType::Absolute,
                     right: Val::Px(0.0),
                     top: Val::Px(0.0),
-                    width: Val::Px(280.0),
+                    width: Val::Px(TERMINAL_WIDTH),
                     height: Val::Percent(100.0),
                     flex_direction: FlexDirection::Column,
                     padding: UiRect::all(Val::Px(10.0)),

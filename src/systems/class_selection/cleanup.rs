@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use crate::assets::ImageAssets;
 use crate::components::ClassSelectionUI;
-use crate::config::TILE_SIZE;
+use crate::config::{TILE_SIZE, TERMINAL_WIDTH};
 use crate::player::Player;
 use crate::resources::SelectedClass;
 use crate::systems::map::GameData;
@@ -28,9 +28,14 @@ pub fn spawn_player(
     let player_class = selected_class.0;
     let player_data = Player::new(player_class, game_map.player_start);
     let player_texture = player_data.class.get_image_handle(&image_assets);
+    
+    // Offset pour décaler le joueur vers la gauche et éviter le chevauchement avec le terminal
+    let x_offset = -TERMINAL_WIDTH / 2.0;
+    
     let player_translation = Vec2::new(
         game_map.player_start.x as f32 * TILE_SIZE
-            - (game_map.width as f32 * TILE_SIZE / 2.0),
+            - (game_map.width as f32 * TILE_SIZE / 2.0)
+            + x_offset,
         game_map.player_start.y as f32 * TILE_SIZE
             - (game_map.height as f32 * TILE_SIZE / 2.0),
     );

@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use crate::assets::ImageAssets;
 use crate::components::{MapTile, Position};
-use crate::config::TILE_SIZE;
+use crate::config::{TILE_SIZE, TERMINAL_WIDTH};
 use crate::enemy::Enemy;
 use crate::item::Item;
 use crate::resources::{CollectedItems, DefeatedEnemies};
@@ -22,6 +22,9 @@ pub fn spawn_map(
 ) {
     let game_map = game_data.get_current_map();
     
+    // Offset pour décaler la map vers la gauche et la faire toucher le terminal
+    let x_offset = -TERMINAL_WIDTH / 2.0;
+    
     // Spawn map tiles
     for y in 0..game_map.height {
         for x in 0..game_map.width {
@@ -33,7 +36,7 @@ pub fn spawn_map(
             };
 
             let position = Vec2::new(
-                x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0),
+                x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0) + x_offset,
                 y as f32 * TILE_SIZE - (game_map.height as f32 * TILE_SIZE / 2.0),
             );
 
@@ -64,7 +67,7 @@ pub fn spawn_map(
 
         let item_texture = item_type.get_image_handle(&image_assets);
         let item_translation = Vec2::new(
-            pos.x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0),
+            pos.x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0) + x_offset,
             pos.y as f32 * TILE_SIZE - (game_map.height as f32 * TILE_SIZE / 2.0),
         );
 
@@ -96,7 +99,7 @@ pub fn spawn_map(
 
         let enemy_texture = enemy_type.get_image_handle(&image_assets);
         let enemy_translation = Vec2::new(
-            pos.x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0),
+            pos.x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0) + x_offset,
             pos.y as f32 * TILE_SIZE - (game_map.height as f32 * TILE_SIZE / 2.0),
         );
 
