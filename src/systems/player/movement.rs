@@ -18,9 +18,9 @@ pub fn move_player(
 
     let game_map = game_data.get_current_map();
 
-    if keyboard_input.just_pressed(KeyCode::Z) || keyboard_input.just_pressed(KeyCode::Up) {
+    if keyboard_input.just_pressed(KeyCode::S) || keyboard_input.just_pressed(KeyCode::Up) {
         new_pos.y = new_pos.y.saturating_sub(1);
-    } else if keyboard_input.just_pressed(KeyCode::S) || keyboard_input.just_pressed(KeyCode::Down)
+    } else if keyboard_input.just_pressed(KeyCode::Z) || keyboard_input.just_pressed(KeyCode::Down)
     {
         new_pos.y = (new_pos.y + 1).min(game_map.height - 1);
     } else if keyboard_input.just_pressed(KeyCode::Q) || keyboard_input.just_pressed(KeyCode::Left)

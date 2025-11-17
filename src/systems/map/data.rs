@@ -105,7 +105,7 @@ impl GameData {
         let layout2 = vec![
             "WWWWWWWWWWWWWW",
             "W P P P P P PW",
-            "W W WWWW WWW W",
+            "W W PPPPPPPP W",
             "W P P  P   P W",
             "W WWWP WWWWP W",
             "C P  P     P W", // Connection at x=0, y=5
