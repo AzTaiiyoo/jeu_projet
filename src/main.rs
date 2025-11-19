@@ -10,7 +10,7 @@ mod resources;
 mod states;
 mod systems;
 
-use config::{TILE_SIZE, TERMINAL_WIDTH};
+use config::{TERMINAL_WIDTH, TILE_SIZE};
 use resources::*;
 use states::GameState;
 use systems::{camera, class_selection, combat, map, player as player_systems, ui};
@@ -41,7 +41,11 @@ fn main() {
         .add_systems(Startup, camera::setup_camera)
         .add_systems(
             OnEnter(GameState::ClassSelection),
-            (assets::load_assets, class_selection::setup_ui),
+            (
+                assets::load_assets,
+                class_selection::setup_ui,
+                class_selection::reset_game_state,
+            ),
         )
         .add_systems(
             Update,
@@ -51,8 +55,14 @@ fn main() {
             OnExit(GameState::ClassSelection),
             (class_selection::cleanup_ui, class_selection::spawn_player),
         )
-        .add_systems(OnEnter(GameState::Map), (map::spawn_map, ui::setup_info_terminal))
-        .add_systems(OnExit(GameState::Map), (map::despawn_map, ui::cleanup_info_terminal))
+        .add_systems(
+            OnEnter(GameState::Map),
+            (map::spawn_map, ui::setup_info_terminal),
+        )
+        .add_systems(
+            OnExit(GameState::Map),
+            (map::despawn_map, ui::cleanup_info_terminal),
+        )
         .add_systems(OnEnter(GameState::MapTransition), map::map_transition)
         .add_systems(
             Update,
@@ -66,7 +76,10 @@ fn main() {
                 .run_if(in_state(GameState::Map)),
         )
         .add_systems(OnEnter(GameState::Combat), combat::setup_combat)
-        .add_systems(Update, combat::handle_combat.run_if(in_state(GameState::Combat)))
+        .add_systems(
+            Update,
+            (combat::handle_combat, combat::update_health_bars).run_if(in_state(GameState::Combat)),
+        )
         .add_systems(OnExit(GameState::Combat), combat::cleanup_combat)
         .run();
 }

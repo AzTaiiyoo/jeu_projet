@@ -1,9 +1,9 @@
-use bevy::prelude::*;
 use crate::components::Position;
 use crate::item::{self, Item, ItemType};
 use crate::player::Player;
 use crate::resources::{CollectedItems, GameLog};
 use crate::systems::map::GameData;
+use bevy::prelude::*;
 
 /// Vérifie si le joueur est sur la même case qu'un objet
 /// Si oui :

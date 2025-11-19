@@ -1,11 +1,11 @@
-use bevy::prelude::*;
 use crate::assets::ImageAssets;
 use crate::components::{MapTile, Position};
-use crate::config::{TILE_SIZE, TERMINAL_WIDTH};
+use crate::config::{TERMINAL_WIDTH, TILE_SIZE};
 use crate::enemy::Enemy;
 use crate::item::Item;
 use crate::resources::{CollectedItems, DefeatedEnemies};
 use crate::systems::map::{GameData, Tile};
+use bevy::prelude::*;
 
 /// Génère tous les éléments visuels de la map actuelle :
 /// - Les tuiles (murs et chemins)
@@ -21,10 +21,10 @@ pub fn spawn_map(
     defeated_enemies: Res<DefeatedEnemies>,
 ) {
     let game_map = game_data.get_current_map();
-    
+
     // Offset pour décaler la map vers la gauche et la faire toucher le terminal
     let x_offset = -TERMINAL_WIDTH / 2.0;
-    
+
     // Spawn map tiles
     for y in 0..game_map.height {
         for x in 0..game_map.width {

@@ -1,5 +1,5 @@
-use bevy::prelude::Component;
 use crate::player::PlayerClass;
+use bevy::prelude::Component;
 
 // ============ Marker Components ============
 // Utilisés uniquement pour identifier/filtrer des entités dans les queries
@@ -35,3 +35,22 @@ pub struct CombatUI;
 /// Marker component pour le texte du log de combat
 #[derive(Component)]
 pub struct CombatLogText;
+
+/// Marker component pour une barre de vie (joueur ou ennemi)
+#[derive(Component)]
+pub enum HealthBar {
+    Player,
+    Enemy,
+}
+
+/// Marker component pour le texte des statistiques du joueur en combat
+#[derive(Component)]
+pub struct PlayerStatsText;
+
+/// Marker component pour le texte des statistiques de l'ennemi en combat
+#[derive(Component)]
+pub struct EnemyStatsText;
+
+/// Marker component pour le message d'action au centre (tour actuel)
+#[derive(Component)]
+pub struct ActionMessageText;

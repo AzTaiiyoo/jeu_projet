@@ -14,12 +14,15 @@ pub fn calculate_damage(attacker_stats: &Stats, rng: &mut impl Rng) -> DamageRes
     let mut damage = attacker_stats.attack;
     let crit_roll = rng.gen_range(1..=100);
     let is_critical = crit_roll <= attacker_stats.critical_chance;
-    
+
     if is_critical {
         damage *= 2;
     }
-    
-    DamageResult { damage, is_critical }
+
+    DamageResult {
+        damage,
+        is_critical,
+    }
 }
 
 /// Vérifie si une attaque est esquivée

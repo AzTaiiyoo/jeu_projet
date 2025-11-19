@@ -1,8 +1,8 @@
-use bevy::prelude::*;
 use crate::components::{InfoTerminal, LogText, StatsText};
 use crate::config::TERMINAL_WIDTH;
 use crate::player::{Player, PlayerClass};
 use crate::resources::GameLog;
+use bevy::prelude::*;
 
 /// Crée l'UI du terminal d'information sur le côté droit de l'écran
 /// Affiche les statistiques du joueur et les événements récents

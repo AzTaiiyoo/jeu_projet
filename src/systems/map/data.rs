@@ -104,18 +104,18 @@ impl GameData {
         // Map 2 - Agrandie avec plus d'ennemis
         let layout2 = vec![
             "WWWWWWWWWWWWWW",
-            "W P P P P P PW",
+            "C P P P P P PW",
             "W W PPPPPPPP C", // Connection at x=13, y=2
             "W P P  P   P W",
             "W WWWP WWWWP W",
-            "C P  P     P W", // Connection at x=0, y=5
+            "W P  P     P W",
             "W WWWWWWWW P W",
             "W P    P P P W",
             "W P PP P P P W",
             "WWWWWWWWWWWWWW",
         ];
         let mut connections2 = HashMap::new();
-        connections2.insert(Position { x: 0, y: 5 }, (0, Position { x: 12, y: 5 }));
+        connections2.insert(Position { x: 0, y: 1 }, (0, Position { x: 12, y: 5 }));
         connections2.insert(Position { x: 13, y: 2 }, (2, Position { x: 1, y: 2 }));
         let items2 = vec![
             (Position { x: 10, y: 2 }, ItemType::Gants),
@@ -157,8 +157,8 @@ impl GameData {
 
         let layout3 = vec![
             "WWWWWWWWWWWWWW",
-            "W P          W",
-            "C WWWWWWWWWW W", // Connection at x=0, y=2
+            "C P          W",
+            "W WWWWWWWWWW W",
             "W P P  P   P W",
             "W WWWW WWWWWWW",
             "W WWWWWWW WWWW",
@@ -169,7 +169,7 @@ impl GameData {
         ];
 
         let mut connections3 = HashMap::new();
-        connections3.insert(Position { x: 0, y: 2 }, (1, Position { x: 12, y: 2 }));
+        connections3.insert(Position { x: 0, y: 1 }, (1, Position { x: 12, y: 2 }));
         let items3 = vec![];
         let enemies3 = vec![
             (Position { x: 11, y: 3 }, EnemyType::Drake),

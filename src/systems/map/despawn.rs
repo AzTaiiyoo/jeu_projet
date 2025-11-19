@@ -1,7 +1,7 @@
-use bevy::prelude::*;
 use crate::components::MapTile;
 use crate::enemy::Enemy;
 use crate::item::Item;
+use bevy::prelude::*;
 
 /// Détruit toutes les entités de la map lors du changement d'état
 /// Nettoie les tuiles, objets et ennemis pour préparer le chargement de la nouvelle map

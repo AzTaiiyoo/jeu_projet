@@ -1,8 +1,8 @@
-use bevy::prelude::*;
 use crate::components::ClassButton;
 use crate::player::PlayerClass;
 use crate::resources::SelectedClass;
 use crate::states::GameState;
+use bevy::prelude::*;
 
 pub fn handle_input(
     mut commands: Commands,

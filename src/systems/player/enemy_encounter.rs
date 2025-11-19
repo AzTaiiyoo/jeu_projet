@@ -1,9 +1,9 @@
-use bevy::prelude::*;
 use crate::components::Position;
 use crate::enemy::Enemy;
 use crate::player::Player;
 use crate::resources::{CombatState, CurrentEnemy, GameLog};
 use crate::states::GameState;
+use bevy::prelude::*;
 
 /// Vérifie si le joueur est sur la même case qu'un ennemi
 /// Si oui :

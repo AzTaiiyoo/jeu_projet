@@ -1,15 +1,12 @@
-use bevy::prelude::*;
 use crate::assets::ImageAssets;
 use crate::components::ClassSelectionUI;
-use crate::config::{TILE_SIZE, TERMINAL_WIDTH};
+use crate::config::{TERMINAL_WIDTH, TILE_SIZE};
 use crate::player::Player;
 use crate::resources::SelectedClass;
 use crate::systems::map::GameData;
+use bevy::prelude::*;
 
-pub fn cleanup_ui(
-    mut commands: Commands,
-    ui_query: Query<Entity, With<ClassSelectionUI>>,
-) {
+pub fn cleanup_ui(mut commands: Commands, ui_query: Query<Entity, With<ClassSelectionUI>>) {
     for entity in ui_query.iter() {
         commands.entity(entity).despawn_recursive();
     }
@@ -28,16 +25,14 @@ pub fn spawn_player(
     let player_class = selected_class.0;
     let player_data = Player::new(player_class, game_map.player_start);
     let player_texture = player_data.class.get_image_handle(&image_assets);
-    
+
     // Offset pour décaler le joueur vers la gauche et éviter le chevauchement avec le terminal
     let x_offset = -TERMINAL_WIDTH / 2.0;
-    
+
     let player_translation = Vec2::new(
-        game_map.player_start.x as f32 * TILE_SIZE
-            - (game_map.width as f32 * TILE_SIZE / 2.0)
+        game_map.player_start.x as f32 * TILE_SIZE - (game_map.width as f32 * TILE_SIZE / 2.0)
             + x_offset,
-        game_map.player_start.y as f32 * TILE_SIZE
-            - (game_map.height as f32 * TILE_SIZE / 2.0),
+        game_map.player_start.y as f32 * TILE_SIZE - (game_map.height as f32 * TILE_SIZE / 2.0),
     );
 
     commands.spawn((

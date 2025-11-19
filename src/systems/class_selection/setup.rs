@@ -1,6 +1,6 @@
-use bevy::prelude::*;
 use crate::components::{ClassButton, ClassSelectionUI};
 use crate::player::PlayerClass;
+use bevy::prelude::*;
 
 pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     // Root node
@@ -53,13 +53,7 @@ pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
                         "Guerrier",
                         "1",
                     );
-                    spawn_class_button(
-                        parent,
-                        &asset_server,
-                        PlayerClass::Mage,
-                        "Magicien",
-                        "2",
-                    );
+                    spawn_class_button(parent, &asset_server, PlayerClass::Mage, "Magicien", "2");
                     spawn_class_button(
                         parent,
                         &asset_server,

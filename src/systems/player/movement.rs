@@ -1,8 +1,8 @@
-use bevy::prelude::*;
 use crate::components::Position;
 use crate::player::Player;
 use crate::states::GameState;
 use crate::systems::map::GameData;
+use bevy::prelude::*;
 
 /// Gère le déplacement du joueur avec les touches Z/Q/S/D ou flèches directionnelles
 /// Vérifie que la nouvelle position est praticable avant de déplacer le joueur
