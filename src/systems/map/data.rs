@@ -104,19 +104,19 @@ impl GameData {
         // Map 2 - Agrandie avec plus d'ennemis
         let layout2 = vec![
             "WWWWWWWWWWWWWW",
-            "C P P P P P PW",
-            "W W PPPPPPPP C", // Connection at x=13, y=2
+            "W P P P P P PC",
+            "W W PPPPPPPP W", // Connection at x=13, y=2
             "W P P  P   P W",
             "W WWWP WWWWP W",
-            "W P  P     P W",
+            "C P  P     P W",
             "W WWWWWWWW P W",
             "W P    P P P W",
             "W P PP P P P W",
             "WWWWWWWWWWWWWW",
         ];
         let mut connections2 = HashMap::new();
-        connections2.insert(Position { x: 0, y: 1 }, (0, Position { x: 12, y: 5 }));
-        connections2.insert(Position { x: 13, y: 2 }, (2, Position { x: 1, y: 2 }));
+        connections2.insert(Position { x: 0, y: 5 }, (0, Position { x: 12, y: 5 }));
+        connections2.insert(Position { x: 13, y: 1 }, (2, Position { x: 1, y: 1}));
         let items2 = vec![
             (Position { x: 10, y: 2 }, ItemType::Gants),
             (Position { x: 11, y: 7 }, ItemType::Pendentif),
@@ -158,10 +158,10 @@ impl GameData {
         let layout3 = vec![
             "WWWWWWWWWWWWWW",
             "C P          W",
-            "W WWWWWWWWWW W",
-            "W P P  P   P W",
-            "W WWWW WWWWWWW",
-            "W WWWWWWW WWWW",
+            "WWWWWWWWWWWW W",
+            "W PP P P P P W",
+            "W WWWWWWWWWWWW",
+            "W WWWWWWWWWWWW",
             "W            W",
             "WWWWWWWWWWWW W",
             "W P PP P P P W",
@@ -169,11 +169,11 @@ impl GameData {
         ];
 
         let mut connections3 = HashMap::new();
-        connections3.insert(Position { x: 0, y: 1 }, (1, Position { x: 12, y: 2 }));
+        connections3.insert(Position { x: 0, y: 1 }, (1, Position { x: 12, y: 1 }));
         let items3 = vec![];
         let enemies3 = vec![
             (Position { x: 11, y: 3 }, EnemyType::Drake),
-            (Position { x: 9, y: 5 }, EnemyType::DeathBird),
+            (Position { x: 9, y: 6 }, EnemyType::DeathBird),
             (Position { x: 3, y: 8 }, EnemyType::Snake),
         ];
 
